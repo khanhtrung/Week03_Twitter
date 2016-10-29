@@ -16,10 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
         
+        //REMARK: - OPEN APP - CHECK CURRENT USER & ACCESS TOKEN
         if User.currentUser != nil {
             print("HAS USER")
+            TwitterClient.sharedInstance.requestSerializer.saveAccessToken(TwitterClient.currentAccessToken)
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyBoard.instantiateViewController(withIdentifier: "HomeNavigationController")
             window?.rootViewController = vc
@@ -28,13 +29,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("NO USER")
         }
         
-        
+        //REMARK: - LOGOUT
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: User.userDidLogoutNotification), object: nil, queue: OperationQueue.main) { (Notification) in
             
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let vc = storyBoard.instantiateInitialViewController()
             self.window?.rootViewController = vc
-            
         }
         
         return true
@@ -64,7 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         
-        //MARK: - ACCESS TOKEN
+        //MARK: - GET ACCESS TOKEN
         TwitterClient.sharedInstance.handleUrl(url: url)
         
         return true

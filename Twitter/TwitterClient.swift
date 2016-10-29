@@ -9,15 +9,44 @@
 import UIKit
 import BDBOAuth1Manager
 
+let BASE_URL = "https://api.twitter.com/"
+let CONSUMER_KEY = "pMEdajjkOcc9sRphXlWrHUofr"
+let CONSUMER_SECRET = "ge7Q2aBBgcuiQmQLPPJmwnwIbIRNF0SBMuwSlQEBXqWLzM3D9M"
+
 class TwitterClient: BDBOAuth1SessionManager {
     
     static let sharedInstance = TwitterClient(
-        baseURL: NSURL(string: "https://api.twitter.com/") as URL!,
-        consumerKey: "pMEdajjkOcc9sRphXlWrHUofr",
-        consumerSecret: "ge7Q2aBBgcuiQmQLPPJmwnwIbIRNF0SBMuwSlQEBXqWLzM3D9M")!
+        baseURL: NSURL(string: BASE_URL) as URL!,
+        consumerKey: CONSUMER_KEY,
+        consumerSecret: CONSUMER_SECRET)!
     
     var loginSuccess: (() -> ())?
     var loginFailure: ((Error) -> ())?
+    
+    //MARK: - CURRENT ACCESS TOKEN
+    static var _currentAccessToken: BDBOAuth1Credential?
+    class var currentAccessToken: BDBOAuth1Credential? {
+        get{
+            if _currentAccessToken == nil {
+                if let accessTokenData = TwitterDefaults.AccessTokenData {
+                    if let accessToken = NSKeyedUnarchiver.unarchiveObject(with: accessTokenData) as? BDBOAuth1Credential {
+                        _currentAccessToken = accessToken
+                    }
+                }
+            }
+            return _currentAccessToken
+        }
+        
+        set(accessToken){
+            _currentAccessToken = accessToken
+            if accessToken != nil {
+                TwitterDefaults.AccessTokenData = NSKeyedArchiver.archivedData(withRootObject: accessToken!)
+            } else {
+                TwitterDefaults.AccessTokenData = nil
+            }
+        }
+    }
+    
     
     //MARK: - REQUEST TOKEN
     func login(success: @escaping () -> (), failure: @escaping (Error) -> ()){
@@ -51,6 +80,7 @@ class TwitterClient: BDBOAuth1SessionManager {
                             self.currentUser(success: { (user:User) in
                                 
                                 User.currentUser = user
+                                TwitterClient.currentAccessToken = response
                                 self.loginSuccess?()
                                 },
                                              failure: { (error:Error) in
@@ -66,6 +96,7 @@ class TwitterClient: BDBOAuth1SessionManager {
     //MARK: - LOGOUT
     func logout(){
         User.currentUser = nil
+        TwitterClient.currentAccessToken = nil
         deauthorize()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: User.userDidLogoutNotification), object: nil)
     }

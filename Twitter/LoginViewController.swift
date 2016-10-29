@@ -29,11 +29,9 @@ class LoginViewController: UIViewController {
             self.performSegue(withIdentifier: "LoginSegue", sender: nil)
             
         }) { (error: Error) in
-            print("Error: \(error.localizedDescription)")
+            print("Login Error: \(error.localizedDescription)")
         }
     }
-    
-    
     
     /*
      // MARK: - Navigation

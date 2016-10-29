@@ -37,22 +37,11 @@ class User: NSObject {
     class var currentUser: User? {
         get{
             if _currentUser == nil {
-                
-//                let defaults = UserDefaults.standard
-//                defaults.set(nil, forKey: "currentUserData")
-//                defaults.synchronize()
-               
-                let userData = UserDefaults.standard.object(forKey: "currentUserData") as? Data
-                if userData != nil{
-//                    let dictionary = try? JSONSerialization.jsonObject(with: userData!, options: []) as! NSDictionary
-//                    _currentUser = User(dictionary: dictionary!)
-                    
+                if let userData = TwitterDefaults.UserData {
                     do {
-                        let dictionary = try JSONSerialization.jsonObject(with: userData!, options: []) as! NSDictionary
+                        let dictionary = try JSONSerialization.jsonObject(with: userData, options: []) as! NSDictionary
                         _currentUser = User(dictionary: dictionary)
                     } catch (_) { }
-                    
-                    
                 }
             }
             return _currentUser
@@ -60,14 +49,12 @@ class User: NSObject {
         
         set(user){
             _currentUser = user
-            let defaults = UserDefaults.standard
-            if let user = user {
-                let userData = try! JSONSerialization.data(withJSONObject: user.dictionary, options: [])
-                defaults.set(userData, forKey: "currentUserData")
+            if user != nil {
+                let userData = try! JSONSerialization.data(withJSONObject: user!.dictionary, options: [])
+                TwitterDefaults.UserData = userData
             } else {
-                defaults.set(nil, forKey: "currentUserData")
+                TwitterDefaults.UserData = nil
             }
-            defaults.synchronize()
         }
     }
 }

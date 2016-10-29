@@ -30,7 +30,7 @@ class HomeViewController: UIViewController {
                 count += 1
             }
         }) { (error: Error) in
-            print("Error: \(error.localizedDescription)")
+            print("Home View did load: Error: \(error.localizedDescription)")
         }
     }
     
