@@ -17,6 +17,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        if User.currentUser != nil {
+            print("HAS USER")
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyBoard.instantiateViewController(withIdentifier: "HomeNavigationController")
+            window?.rootViewController = vc
+        }
+        else {
+            print("NO USER")
+        }
+        
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: User.userDidLogoutNotification), object: nil, queue: OperationQueue.main) { (Notification) in
+            
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyBoard.instantiateInitialViewController()
+            self.window?.rootViewController = vc
+            
+        }
+        
         return true
     }
     
@@ -43,62 +63,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
-        let twitterClient = BDBOAuth1SessionManager(
-            baseURL: NSURL(string: "https://api.twitter.com/") as URL!,
-            consumerKey: "pMEdajjkOcc9sRphXlWrHUofr",
-            consumerSecret: "ge7Q2aBBgcuiQmQLPPJmwnwIbIRNF0SBMuwSlQEBXqWLzM3D9M")
-        
-        let  requestToken = BDBOAuth1Credential.init(queryString: url.query)
         
         //MARK: - ACCESS TOKEN
-        twitterClient?.fetchAccessToken(withPath: "oauth/access_token", method: "POST",
-                                        requestToken: requestToken,
-                                        success: { (response: BDBOAuth1Credential?) in
-                                            print("Access token >\((response?.token)!)<")
-  
-                                            //MARK: - VERIFY CREDENTIALS
-                                            twitterClient?.get("1.1/account/verify_credentials.json",
-                                                               parameters: nil, progress: nil,
-                                                               success: { (nil, verifyResponse) in
-                                                                let user = verifyResponse as! NSDictionary
-                                                                print(user["name"]as! String)
-                                                                print(user["screen_name"]as! String)
-                                                                print(user["profile_image_url_https"]as! String)
-                                                                
-                                                }, failure: { (nil, error: Error) in
-                                                    print("\(error.localizedDescription)")
-                                            })
-                                            
-                                            
-                                            //MARK: - HOME TIMELINE
-                                            twitterClient?.get("1.1/statuses/home_timeline.json",
-                                                               parameters: nil, progress: nil,
-                                                               success: { (nil, verifyResponse) in
-                                                                
-                                                                let tweets = verifyResponse as! [NSDictionary]
-                                                                
-                                                                var count = 1
-                                                                for tweet in tweets {
-                                                                    
-                                                                    print("-------|")
-                                                                    print("\(count)")
-                                                                    print("\(tweet["text"] as! String)")
-                                                                    print("L_______")
-                                                                    print(" ")
-                                                                    
-                                                                    count += 1
-                                                                }
-                                                                
-                                                }, failure: { (nil, error: Error) in
-                                                    print("\(error.localizedDescription)")
-                                            })
-                                            
-                                            
-                                            
-            },
-                                        failure: { (error: Error?) in
-                                            print("\(error?.localizedDescription)")
-        })
+        TwitterClient.sharedInstance.handleUrl(url: url)
         
         return true
     }
