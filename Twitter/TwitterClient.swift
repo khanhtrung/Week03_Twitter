@@ -127,9 +127,9 @@ class TwitterClient: BDBOAuth1SessionManager {
     func homeTimeline(success: @escaping  ([Tweet]) -> (), failure: @escaping (Error) -> ()){
         get("1.1/statuses/home_timeline.json",
             parameters: nil, progress: nil,
-            success: { (nil, verifyResponse) in
+            success: { (nil, response) in
                 
-                let dictArr = verifyResponse as! [NSDictionary]
+                let dictArr = response as! [NSDictionary]
                 let tweets = Tweet.tweetsWithArray(dictionaryArr: dictArr)
                 success(tweets)
                 
@@ -137,5 +137,28 @@ class TwitterClient: BDBOAuth1SessionManager {
             failure: { (nil, error: Error) in
                 failure(error)
         })
+    }
+    
+    //MARK: - favorites/create
+    func createFavorite(id_Int: Int64, success: @escaping  (Tweet) -> (), failure: @escaping (Error) -> ()){
+        
+        var params: [String : AnyObject] = [:]
+        // Status id
+        params["id"] = id_Int as AnyObject?
+        
+        let URL =
+        get("1.1/favorites/create.json",
+            parameters: params, progress: nil,
+            success: { (nil, response) in
+                
+                let dictArr = response as! NSDictionary
+                let tweet = Tweet(dictionary: dictArr)
+                success(tweet)
+            },
+            failure: { (nil, error: Error) in
+                failure(error)
+        })?.currentRequest?.url
+        
+        print(URL?.absoluteString)
     }
 }

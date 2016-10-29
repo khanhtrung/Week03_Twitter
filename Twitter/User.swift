@@ -9,7 +9,7 @@
 import UIKit
 
 class User: NSObject {
-        
+    
     static let userDidLogoutNotification = "UserDidLogout"
     
     var id_str: String?
