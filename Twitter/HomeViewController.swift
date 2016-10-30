@@ -94,7 +94,7 @@ class HomeViewController: UIViewController {
             }
             self.isMoreDataLoading = false
             self.loadingMoreView!.stopAnimating()
-                        
+            
             self.refreshControl.endRefreshing()
         }
     }
@@ -102,28 +102,36 @@ class HomeViewController: UIViewController {
     @IBAction func onLogoutButton(_ sender: AnyObject) {
         TwitterClient.sharedInstance.logout()
     }
+    
+    @IBAction func onNewTweetButton(_ sender: AnyObject) {
+        self.performSegue(withIdentifier: "newTweetSegue", sender: self)
+    }
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         if let segueID = segue.identifier {
             switch segueID {
-            case "replyTweetSegueFromTweet":
-                break
-            case "replyTweetSegueFromTimeline":
+            case "newTweetSegue":
+                let nav = segue.destination as! UINavigationController
+                let newTweetViewController = nav.topViewController as! NewTweetViewController
+                newTweetViewController.tweetUser = User.currentUser!
+                newTweetViewController.delegate = self
                 break
                 
-            //tweetSegueFromTimeline
-            default:
+            case "tweetSegueFromTimeline":
                 let cell = sender as! UITableViewCell
                 let indexpath = tableView.indexPath(for: cell)
                 let tweet = tweets[(indexpath?.row)!]
                 
                 let tweetViewController = segue.destination as! TweetViewController
                 tweetViewController.id = tweet.id
+                break
+            default:
                 break
             }
         }
@@ -151,16 +159,26 @@ extension HomeViewController: HomeTweetCellDelegate {
         let indexPath = tableView.indexPath(for: homeTweetCell)!
         retweetStates[indexPath.row] = homeTweetCell.isRetweeted
         tweets[indexPath.row] = homeTweetCell.tweet
+        print("Retweet - Have to update UI")
     }
     
     func favorite(homeTweetCell: HomeTweetCell, didChangeValue value: Bool) {
         let indexPath = tableView.indexPath(for: homeTweetCell)!
         favoriteStates[indexPath.row] = homeTweetCell.isFavorited
         tweets[indexPath.row] = homeTweetCell.tweet
+        print("Favorite - Have to update UI")
     }
     
     func reply(homeTweetCell: HomeTweetCell, sender: UIButton) {
         self.performSegue(withIdentifier: "replyTweetSegueFromTimeline", sender: sender)
+    }
+}
+
+//MARK: - NewTweetViewController methods
+extension HomeViewController: NewTweetViewControllerDelegate {
+    func newTweetViewController(newTweetViewController: NewTweetViewController, didUpdateTweet tweet: Tweet?) {
+        tweets.insert(tweet!, at: 0)
+        tableView.reloadData()
     }
 }
 

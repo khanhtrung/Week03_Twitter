@@ -207,10 +207,15 @@
                                 <action selector="onLogoutButton:" destination="ZBw-81-zjG" id="2Xl-Fc-S2N"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="New" id="BVI-mb-nNF">
+                            <connections>
+                                <action selector="onNewTweetButton:" destination="ZBw-81-zjG" id="jW2-Xg-OIf"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="gGL-1i-nSk" id="b5I-8H-Aus"/>
-                        <segue destination="Rhc-lb-qUQ" kind="presentation" id="0aX-aR-MdC"/>
+                        <segue destination="Rhc-lb-qUQ" kind="presentation" identifier="newTweetSegue" id="0aX-aR-MdC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FOg-t0-8el" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -358,17 +363,16 @@
                     </view>
                     <connections>
                         <outlet property="tableView" destination="1yN-aX-kXA" id="6b6-Rv-tY4"/>
-                        <segue destination="Rhc-lb-qUQ" kind="presentation" id="wzt-JY-F7Q"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8Xn-Rs-kAA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2841" y="466"/>
+            <point key="canvasLocation" x="2801" y="506"/>
         </scene>
-        <!--Reply View Controller-->
+        <!--New Tweet View Controller-->
         <scene sceneID="4Tc-3k-vsh">
             <objects>
-                <viewController id="6Uk-52-7dh" customClass="ReplyViewController" customModule="Twitter" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="6Uk-52-7dh" customClass="NewTweetViewController" customModule="Twitter" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Pcm-7v-vBb"/>
                         <viewControllerLayoutGuide type="bottom" id="qEv-xw-YJf"/>
@@ -377,35 +381,65 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZKn-Oa-6xe">
-                                <frame key="frameInset" minX="47" minY="119" width="48" height="48"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2cQ-0R-G7E">
+                                <frame key="frameInset" minX="10" minY="72" width="48" height="48"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Khanh Trung" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1zT-Z9-2kZ">
-                                <frame key="frameInset" minX="103" minY="119" width="91" height="45"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Khanh Trung" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U9A-Sf-JF0">
+                                <frame key="frameInset" minX="66" minY="72" width="91" height="18"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" fixedFrame="YES" text="@khanhtrung90" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8VO-Zz-a29">
+                                <frame key="frameInset" minX="66" minY="98" width="105" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <color key="textColor" red="0.39607843139999999" green="0.46666666670000001" blue="0.52549019610000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" fixedFrame="YES" text="140" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CgE-ON-CJA">
+                                <frame key="frameInset" minX="278" minY="98" width="26" height="18"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <color key="textColor" red="0.39607843139999999" green="0.46666666670000001" blue="0.52549019610000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1ud-ti-BQR">
+                                <frame key="frameInset" minX="10" minY="128" width="300" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <string key="text">This is a test tweet text so it has multiple lines to test the layout. This is a test tweet text so it has multiple lines to test the layout</string>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="qQQ-ga-lhY">
-                        <barButtonItem key="leftBarButtonItem" title="UserImage" id="Ra0-l4-y8T"/>
-                        <barButtonItem key="rightBarButtonItem" title="Close" id="jhM-5o-xRH">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="Ra0-l4-y8T">
                             <connections>
-                                <action selector="onDismissView:" destination="6Uk-52-7dh" id="1PE-a7-DYe"/>
+                                <action selector="onCancelButton:" destination="6Uk-52-7dh" id="jnJ-tp-qGx"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Tweet" id="jhM-5o-xRH">
+                            <connections>
+                                <action selector="onTweetButton:" destination="6Uk-52-7dh" id="XY2-GX-A58"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="userProfileImage" destination="Ra0-l4-y8T" id="bvr-mh-01g"/>
+                        <outlet property="charsCountLabel" destination="CgE-ON-CJA" id="aDS-mZ-51k"/>
+                        <outlet property="profileImageView" destination="2cQ-0R-G7E" id="FCe-3D-7nw"/>
+                        <outlet property="screenNameLabel" destination="8VO-Zz-a29" id="peU-54-CKz"/>
+                        <outlet property="tweetTextField" destination="1ud-ti-BQR" id="szu-Lb-d2e"/>
+                        <outlet property="userNameLabel" destination="U9A-Sf-JF0" id="vKU-CL-ZWZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="04q-1b-flY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4730.625" y="122.53521126760563"/>
+            <point key="canvasLocation" x="3573.75" y="-401.40845070422534"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="EGR-lV-dQ7">
@@ -441,7 +475,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="InY-xK-ru4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3731.25" y="122.53521126760563"/>
+            <point key="canvasLocation" x="2803" y="-401"/>
         </scene>
     </scenes>
     <resources>
@@ -449,7 +483,4 @@
         <image name="reply-action_0" width="32" height="36"/>
         <image name="retweet-action" width="75" height="72"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="0aX-aR-MdC"/>
-    </inferredMetricsTieBreakers>
 </document>

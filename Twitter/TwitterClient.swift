@@ -238,4 +238,18 @@ class TwitterClient: BDBOAuth1SessionManager {
                 failure(error)
         })
     }
+    
+    //MARK: - statuses/update
+    func updateStatuses(status: String,
+                          completion: @escaping (_ success: Tweet?, _ failure: Error?) -> ()) {
+        let params: [String : AnyObject] = ["status":(status as AnyObject?)!]
+        post("1.1/statuses/update.json", parameters: params, progress: nil,
+            success: { (urlSessionDataTask, response) in
+                let tweet = Tweet(dictionary: response as! NSDictionary)
+                completion(tweet, nil)
+            },
+            failure: { (urlSessionDataTask, error: Error?) in
+                completion(nil, error)
+        })
+    }
 }
