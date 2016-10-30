@@ -27,14 +27,33 @@
                                     <action selector="onLogin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="HDb-RA-vqq"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v26-1Y-WVW">
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Network Error" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bTd-57-GQB">
+                                        <frame key="frameInset" minX="107" minY="12" width="107" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.63012522159999995" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="D4h-oP-jUE"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="JEt-xO-L3q" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="8wZ-4r-7ZE"/>
+                            <constraint firstItem="v26-1Y-WVW" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="JX9-Kl-s0O"/>
+                            <constraint firstAttribute="trailing" secondItem="v26-1Y-WVW" secondAttribute="trailing" id="V5c-d3-bPc"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="JEt-xO-L3q" secondAttribute="bottom" constant="276" id="WZC-W8-3H2"/>
+                            <constraint firstItem="v26-1Y-WVW" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="nfq-wx-RYd"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="networkErrorView" destination="v26-1Y-WVW" id="HgX-XC-N4T"/>
                         <segue destination="bLO-p6-cyn" kind="presentation" identifier="LoginSegue" id="6yw-xv-ynn"/>
                     </connections>
                 </viewController>

@@ -11,6 +11,8 @@ import UIKit
 class HomeViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
+    var refreshControl: UIRefreshControl!
+    
     
     var tweets = [Tweet]()
     var retweetStates = [Int:Bool]()
@@ -25,6 +27,11 @@ class HomeViewController: UIViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 150
         
+        // Setup Refrsh control
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(getHomeTimeline), for: UIControlEvents.valueChanged)
+        tableView.insertSubview(refreshControl, at: 0)
+        
         getHomeTimeline()
     }
     
@@ -33,7 +40,7 @@ class HomeViewController: UIViewController {
             self.tweets.removeAll()
             self.tweets = tweets
             self.tableView.reloadData()
-            
+            self.refreshControl.endRefreshing()
         }) { (error: Error) in
             print("Home View did load: Error: \(error.localizedDescription)")
         }
@@ -60,13 +67,13 @@ class HomeViewController: UIViewController {
                 
                 break
             case "replyTweetSegueFromTimeline":
-//                let cell = sender as! UITableViewCell
-//                let indexpath = tableView.indexPath(for: cell)
-//                let tweet = tweets[(indexpath?.row)!]
-//                
-//                let replyViewController = segue.destination as! ReplyViewController
-//                replyViewController.tweetUser = User(dictionary: tweet.user)
-//                
+                //                let cell = sender as! UITableViewCell
+                //                let indexpath = tableView.indexPath(for: cell)
+                //                let tweet = tweets[(indexpath?.row)!]
+                //
+                //                let replyViewController = segue.destination as! ReplyViewController
+                //                replyViewController.tweetUser = User(dictionary: tweet.user)
+                //
                 break
                 
             //tweetSegueFromTimeline
@@ -92,8 +99,6 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HomeTweetCell", for: indexPath) as! HomeTweetCell
         cell.tweet = tweets[indexPath.row]
-        //        cell.isRetweeted = cell.tweet.retweeted
-        //        cell.isFavorited = cell.tweet.favorited
         cell.delegate = self
         return cell
     }
@@ -105,28 +110,18 @@ extension HomeViewController: HomeTweetCellDelegate {
     func retweet(homeTweetCell: HomeTweetCell, didChangeValue value: Bool) {
         let indexPath = tableView.indexPath(for: homeTweetCell)!
         retweetStates[indexPath.row] = homeTweetCell.isRetweeted
+        tweets[indexPath.row] = homeTweetCell.tweet
     }
     
     func favorite(homeTweetCell: HomeTweetCell, didChangeValue value: Bool) {
         let indexPath = tableView.indexPath(for: homeTweetCell)!
         favoriteStates[indexPath.row] = homeTweetCell.isFavorited
+        tweets[indexPath.row] = homeTweetCell.tweet
     }
     
     
     func reply(homeTweetCell: HomeTweetCell, sender: UIButton) {
         self.performSegue(withIdentifier: "replyTweetSegueFromTimeline", sender: sender)
     }
-    
-//    func repl
-    
-//    func reply1(homeTweetCell: HomeTweetCell) {
-//        print("reply clicked delegate")
-//        
-//        performSegue(withIdentifier: <#T##String#>, sender: <#T##Any?#>)
-//        
-//        self.performSegue(withIdentifier: "replyTweetSegueFromTimeline", sender: homeTweetCell)
-//        
-////        performSegue(withIdentifier: "replyTweetSegueFromTimeline", sender: homeTweetCell)//Any?.self)
-//    }
 }
 

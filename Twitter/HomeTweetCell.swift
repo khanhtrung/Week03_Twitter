@@ -68,10 +68,18 @@ class HomeTweetCell: UITableViewCell {
                 tweetTextLabel.text = tweetText
             }
             
-            retweetCountLabel.text = tweet.retweet_count.description != "0" ? tweet.retweet_count.description : ""
+            if (tweet.retweet_count.description == "0") {
+                retweetCountLabel.text = ""
+            } else {
+                retweetCountLabel.text = tweet.retweet_count.description
+            }
             isRetweeted = tweet.retweeted
             
-            favoriteCountLabel.text = tweet.favorite_count.description != "0" ? tweet.favorite_count.description : ""
+            if (tweet.favorite_count.description == "0") {
+                favoriteCountLabel.text = ""
+            } else {
+                favoriteCountLabel.text = tweet.favorite_count.description
+            }
             isFavorited = tweet.favorited
         }
     }
@@ -85,6 +93,7 @@ class HomeTweetCell: UITableViewCell {
                 retweetButton.setImage(UIImage(named: "retweet-action"), for: .normal)
                 retweetCountLabel.textColor = UIColor(red:0.67, green:0.72, blue:0.76, alpha:1.0) // #AAB8C2
             }
+            retweetCountLabel.text = tweet.retweet_count.description != "0" ? tweet.retweet_count.description : ""
         }
     }
     
@@ -97,6 +106,7 @@ class HomeTweetCell: UITableViewCell {
                 favoriteButton.setImage(UIImage(named: "like-action"), for: .normal)
                 favoriteCountLabel.textColor = UIColor(red:0.67, green:0.72, blue:0.76, alpha:1.0) // #AAB8C2
             }
+            favoriteCountLabel.text = tweet.favorite_count.description != "0" ? tweet.favorite_count.description : ""
         }
     }
     
