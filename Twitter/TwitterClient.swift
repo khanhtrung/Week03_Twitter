@@ -10,13 +10,6 @@ import UIKit
 import BDBOAuth1Manager
 
 let BASE_URL = "https://api.twitter.com/"
-//let CONSUMER_KEY = "pMEdajjkOcc9sRphXlWrHUofr"
-//let CONSUMER_SECRET = "ge7Q2aBBgcuiQmQLPPJmwnwIbIRNF0SBMuwSlQEBXqWLzM3D9M"
-
-// Dave's
-//let CONSUMER_KEY = "JxUiG0fZyXliskmGJZYLjZcc4"
-//let CONSUMER_SECRET = "2rW7IMZQ9Iz73JTwm800PGoaRHTPa3Vz59nDRXx2I1NIEaiipo"
-
 let CONSUMER_KEY = "NT6Ws92ktDmqyoQZyTvAHJ1Pb"
 let CONSUMER_SECRET = "8zfScWQC9ZCIl6ejDifVTKhoNxBeFx7BDyVG5bipfg8sf44iKE"
 
@@ -131,9 +124,16 @@ class TwitterClient: BDBOAuth1SessionManager {
     }
     
     //MARK: - HOME TIMELINE
-    func homeTimeline(success: @escaping  ([Tweet]) -> (), failure: @escaping (Error) -> ()){
+    func homeTimeline(max_id: Int64, success: @escaping  ([Tweet]) -> (), failure: @escaping (Error) -> ()){
+        var  params: [String : AnyObject]?
+        if max_id != 0 {
+            params = ["max_id":(max_id as AnyObject?)!]
+        } else {
+            params = nil
+        }
+        
         get("1.1/statuses/home_timeline.json",
-            parameters: nil, progress: nil,
+            parameters: params, progress: nil,
             success: { (nil, response) in
                 
                 let dictArr = response as! [NSDictionary]
@@ -146,19 +146,31 @@ class TwitterClient: BDBOAuth1SessionManager {
         })
     }
     
+    func homeTimelineWith(params: NSDictionary?,
+                          completion: @escaping (_ success: [Tweet]?, _ failure: Error?) -> ()) {
+        get("1.1/statuses/home_timeline.json", parameters: params, progress: nil,
+            success: { (urlSessionDataTask, response) in
+                let tweets = Tweet.tweetsWithArray(dictionaryArr: response as! [NSDictionary])
+                completion(tweets, nil)
+            },
+            failure: { (urlSessionDataTask, error: Error?) in
+                completion(nil, error)
+        })
+    }
+    
     //MARK: - statuses/retweet/:id
     func retweet(id_Int: Int64, success: @escaping  (Tweet) -> (), failure: @escaping (Error) -> ()){
-            post("1.1/statuses/retweet/\(id_Int).json",
-                 parameters: nil, progress: nil,
-                 success: { (nil, response) in
-                    
-                    let dictArr = response as! NSDictionary
-                    let tweet = Tweet(dictionary: dictArr)
-                    success(tweet)
-                },
-                 failure: { (nil, error: Error) in
-                    failure(error)
-            })
+        post("1.1/statuses/retweet/\(id_Int).json",
+            parameters: nil, progress: nil,
+            success: { (nil, response) in
+                
+                let dictArr = response as! NSDictionary
+                let tweet = Tweet(dictionary: dictArr)
+                success(tweet)
+            },
+            failure: { (nil, error: Error) in
+                failure(error)
+        })
     }
     
     //MARK: - statuses/unretweet/:id
@@ -181,14 +193,14 @@ class TwitterClient: BDBOAuth1SessionManager {
         
         let params: [String : AnyObject] = ["id":(id_Int as AnyObject?)!]
         post("1.1/favorites/create.json",
-            parameters: params, progress: nil,
-            success: { (nil, response) in
+             parameters: params, progress: nil,
+             success: { (nil, response) in
                 
                 let dictArr = response as! NSDictionary
                 let tweet = Tweet(dictionary: dictArr)
                 success(tweet)
             },
-            failure: { (nil, error: Error) in
+             failure: { (nil, error: Error) in
                 failure(error)
         })
     }
@@ -197,17 +209,17 @@ class TwitterClient: BDBOAuth1SessionManager {
     func destroyFavorite(id_Int: Int64, success: @escaping  (Tweet) -> (), failure: @escaping (Error) -> ()){
         
         let params: [String : AnyObject] = ["id":(id_Int as AnyObject?)!]
-            post("1.1/favorites/destroy.json",
-                 parameters: params, progress: nil,
-                 success: { (nil, response) in
-                    
-                    let dictArr = response as! NSDictionary
-                    let tweet = Tweet(dictionary: dictArr)
-                    success(tweet)
-                },
-                 failure: { (nil, error: Error) in
-                    failure(error)
-            })
+        post("1.1/favorites/destroy.json",
+             parameters: params, progress: nil,
+             success: { (nil, response) in
+                
+                let dictArr = response as! NSDictionary
+                let tweet = Tweet(dictionary: dictArr)
+                success(tweet)
+            },
+             failure: { (nil, error: Error) in
+                failure(error)
+        })
     }
     
     //MARK: - statuses/lookup
