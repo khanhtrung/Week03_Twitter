@@ -10,8 +10,15 @@ import UIKit
 import BDBOAuth1Manager
 
 let BASE_URL = "https://api.twitter.com/"
-let CONSUMER_KEY = "pMEdajjkOcc9sRphXlWrHUofr"
-let CONSUMER_SECRET = "ge7Q2aBBgcuiQmQLPPJmwnwIbIRNF0SBMuwSlQEBXqWLzM3D9M"
+//let CONSUMER_KEY = "pMEdajjkOcc9sRphXlWrHUofr"
+//let CONSUMER_SECRET = "ge7Q2aBBgcuiQmQLPPJmwnwIbIRNF0SBMuwSlQEBXqWLzM3D9M"
+
+// Dave's
+//let CONSUMER_KEY = "JxUiG0fZyXliskmGJZYLjZcc4"
+//let CONSUMER_SECRET = "2rW7IMZQ9Iz73JTwm800PGoaRHTPa3Vz59nDRXx2I1NIEaiipo"
+
+let CONSUMER_KEY = "NT6Ws92ktDmqyoQZyTvAHJ1Pb"
+let CONSUMER_SECRET = "8zfScWQC9ZCIl6ejDifVTKhoNxBeFx7BDyVG5bipfg8sf44iKE"
 
 class TwitterClient: BDBOAuth1SessionManager {
     
@@ -139,15 +146,41 @@ class TwitterClient: BDBOAuth1SessionManager {
         })
     }
     
+    //MARK: - statuses/retweet/:id
+    func retweet(id_Int: Int64, success: @escaping  (Tweet) -> (), failure: @escaping (Error) -> ()){
+            post("1.1/statuses/retweet/\(id_Int).json",
+                 parameters: nil, progress: nil,
+                 success: { (nil, response) in
+                    
+                    let dictArr = response as! NSDictionary
+                    let tweet = Tweet(dictionary: dictArr)
+                    success(tweet)
+                },
+                 failure: { (nil, error: Error) in
+                    failure(error)
+            })
+    }
+    
+    //MARK: - statuses/unretweet/:id
+    func unretweet(id_Int: Int64, success: @escaping  (Tweet) -> (), failure: @escaping (Error) -> ()){
+        post("1.1/statuses/unretweet/\(id_Int).json",
+            parameters: nil, progress: nil,
+            success: { (nil, response) in
+                
+                let dictArr = response as! NSDictionary
+                let tweet = Tweet(dictionary: dictArr)
+                success(tweet)
+            },
+            failure: { (nil, error: Error) in
+                failure(error)
+        })
+    }
+    
     //MARK: - favorites/create
     func createFavorite(id_Int: Int64, success: @escaping  (Tweet) -> (), failure: @escaping (Error) -> ()){
         
-        var params: [String : AnyObject] = [:]
-        // Status id
-        params["id"] = id_Int as AnyObject?
-        
-        let URL =
-        get("1.1/favorites/create.json",
+        let params: [String : AnyObject] = ["id":(id_Int as AnyObject?)!]
+        post("1.1/favorites/create.json",
             parameters: params, progress: nil,
             success: { (nil, response) in
                 
@@ -157,8 +190,23 @@ class TwitterClient: BDBOAuth1SessionManager {
             },
             failure: { (nil, error: Error) in
                 failure(error)
-        })?.currentRequest?.url
+        })
+    }
+    
+    //MARK: - favorites/destroy
+    func destroyFavorite(id_Int: Int64, success: @escaping  (Tweet) -> (), failure: @escaping (Error) -> ()){
         
-        print(URL?.absoluteString)
+        let params: [String : AnyObject] = ["id":(id_Int as AnyObject?)!]
+            post("1.1/favorites/destroy.json",
+                 parameters: params, progress: nil,
+                 success: { (nil, response) in
+                    
+                    let dictArr = response as! NSDictionary
+                    let tweet = Tweet(dictionary: dictArr)
+                    success(tweet)
+                },
+                 failure: { (nil, error: Error) in
+                    failure(error)
+            })
     }
 }

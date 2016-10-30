@@ -66,17 +66,9 @@ class HomeTweetCell: UITableViewCell {
             }
             
             retweetCountLabel.text = tweet.retweet_count.description != "0" ? tweet.retweet_count.description : ""
-            if tweet.retweeted {
-                retweetButton.setImage(UIImage(named: "retweet-action-on"), for: .normal)
-                retweetCountLabel.textColor = UIColor(red:0.10, green:0.81, blue:0.53, alpha:1.0) // #19CF86
-            }
             isRetweeted = tweet.retweeted
             
             favoriteCountLabel.text = tweet.favorite_count.description != "0" ? tweet.favorite_count.description : ""
-            if tweet.favorited {
-                favoriteButton.setImage(UIImage(named: "like-action-on"), for: .normal)
-                favoriteCountLabel.textColor = UIColor(red:0.91, green:0.11, blue:0.31, alpha:1.0) // #E81C4F
-            }
             isFavorited = tweet.favorited
         }
     }
@@ -120,28 +112,42 @@ class HomeTweetCell: UITableViewCell {
     }
     
     @IBAction func onRetweetButton(_ sender: UIButton) {
-        isRetweeted = !isRetweeted
+        if !isRetweeted {
+            TwitterClient.sharedInstance.retweet(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
+                self.tweet = responseTweet
+                self.delegate?.retweet!(homeTweetCell: self, didChangeValue: self.isRetweeted)
+                print("Retweet: \(self.tweet.retweeted)")
+            }) { (error:Error) in
+                print("Retweet: Error: \(error.localizedDescription)")
+            }
+            return
+        }
         
-//        TwitterClient.sharedInstance.createFavorite(id_str: self.tweet.id_str!, success: { (responseTweet:Tweet) in
-//            self.tweet = responseTweet
-//        }) { (error:Error) in
-//            print("Create Favorite: Error: \(error.localizedDescription)")
-//        }
-        
-        delegate?.retweet!(homeTweetCell: self, didChangeValue: isRetweeted)
+        TwitterClient.sharedInstance.unretweet(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
+            self.tweet = responseTweet
+            self.delegate?.retweet!(homeTweetCell: self, didChangeValue: self.isRetweeted)
+            print("Retweet: \(self.tweet.retweeted)")
+        }) { (error:Error) in
+            print("UnRetweeted: Error: \(error.localizedDescription)")
+        }
     }
     
     @IBAction func onFavoriteButton(_ sender: UIButton) {
-        isFavorited = !isFavorited
-        
-        TwitterClient.sharedInstance.createFavorite(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
-            self.tweet = responseTweet
-        }) { (error:Error) in
-            print("Create Favorite: Error: \(error.localizedDescription)")
+        if !isFavorited {
+            TwitterClient.sharedInstance.createFavorite(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
+                self.tweet = responseTweet
+                self.delegate?.favorite!(homeTweetCell: self, didChangeValue: self.isFavorited)
+            }) { (error:Error) in
+                print("Create Favorite: Error: \(error.localizedDescription)")
+            }
+            return
         }
         
-        
-        delegate?.favorite!(homeTweetCell: self, didChangeValue: isFavorited)
+        TwitterClient.sharedInstance.destroyFavorite(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
+            self.tweet = responseTweet
+            self.delegate?.favorite!(homeTweetCell: self, didChangeValue: self.isFavorited)
+        }) { (error:Error) in
+            print("Destroy Favorite: Error: \(error.localizedDescription)")
+        }
     }
-    
 }
