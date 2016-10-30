@@ -209,4 +209,21 @@ class TwitterClient: BDBOAuth1SessionManager {
                     failure(error)
             })
     }
+    
+    //MARK: - statuses/lookup
+    func lookupStatuses(id_Int: Int64, success: @escaping  ([Tweet]) -> (), failure: @escaping (Error) -> ()){
+        let params: [String : AnyObject] = ["id":(id_Int as AnyObject?)!]
+        get("1.1/statuses/lookup.json",
+            parameters: params, progress: nil,
+            success: { (nil, response) in
+                
+                let dictArr = response as! [NSDictionary]
+                let tweets = Tweet.tweetsWithArray(dictionaryArr: dictArr)
+                success(tweets)
+                
+            },
+            failure: { (nil, error: Error) in
+                failure(error)
+        })
+    }
 }

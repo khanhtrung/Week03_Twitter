@@ -14,6 +14,8 @@ import NSDate_TimeAgo
     @objc optional func retweet(homeTweetCell: HomeTweetCell, didChangeValue value: Bool)
     
     @objc optional func favorite(homeTweetCell: HomeTweetCell, didChangeValue value: Bool)
+    
+    @objc optional func reply(homeTweetCell: HomeTweetCell, sender: UIButton)
 }
 
 
@@ -26,6 +28,7 @@ class HomeTweetCell: UITableViewCell {
     @IBOutlet weak var createdAtLabel: UILabel!
     @IBOutlet weak var tweetTextLabel: UILabel!
     
+    @IBOutlet weak var replyButton: UIButton!
     @IBOutlet weak var retweetButton: UIButton!
     @IBOutlet weak var retweetCountLabel: UILabel!
     
@@ -109,6 +112,8 @@ class HomeTweetCell: UITableViewCell {
     }
     
     @IBAction func onReplyButton(_ sender: UIButton) {
+        print("reply clicked")
+        //self.delegate?.reply!(homeTweetCell: self, sender: sender)
     }
     
     @IBAction func onRetweetButton(_ sender: UIButton) {

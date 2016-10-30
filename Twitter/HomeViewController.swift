@@ -47,17 +47,40 @@ class HomeViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - Navigation
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+        
+        if let segueID = segue.identifier {
+            switch segueID {
+            case "replyTweetSegueFromTweet":
+                
+                break
+            case "replyTweetSegueFromTimeline":
+//                let cell = sender as! UITableViewCell
+//                let indexpath = tableView.indexPath(for: cell)
+//                let tweet = tweets[(indexpath?.row)!]
+//                
+//                let replyViewController = segue.destination as! ReplyViewController
+//                replyViewController.tweetUser = User(dictionary: tweet.user)
+//                
+                break
+                
+            //tweetSegueFromTimeline
+            default:
+                let cell = sender as! UITableViewCell
+                let indexpath = tableView.indexPath(for: cell)
+                let tweet = tweets[(indexpath?.row)!]
+                
+                let tweetViewController = segue.destination as! TweetViewController
+                tweetViewController.id = tweet.id
+                break
+            }
+        }
+    }
 }
 
 //MARK: - Table methods
@@ -88,5 +111,22 @@ extension HomeViewController: HomeTweetCellDelegate {
         let indexPath = tableView.indexPath(for: homeTweetCell)!
         favoriteStates[indexPath.row] = homeTweetCell.isFavorited
     }
+    
+    
+    func reply(homeTweetCell: HomeTweetCell, sender: UIButton) {
+        self.performSegue(withIdentifier: "replyTweetSegueFromTimeline", sender: sender)
+    }
+    
+//    func repl
+    
+//    func reply1(homeTweetCell: HomeTweetCell) {
+//        print("reply clicked delegate")
+//        
+//        performSegue(withIdentifier: <#T##String#>, sender: <#T##Any?#>)
+//        
+//        self.performSegue(withIdentifier: "replyTweetSegueFromTimeline", sender: homeTweetCell)
+//        
+////        performSegue(withIdentifier: "replyTweetSegueFromTimeline", sender: homeTweetCell)//Any?.self)
+//    }
 }
 
