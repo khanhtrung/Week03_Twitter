@@ -2,7 +2,7 @@
 
 **Twitter** is a basic twitter app to read and compose tweets from the [Twitter API](https://apps.twitter.com/).
 
-Time spent: **23** hours spent in total
+Time spent: **28** hours spent in total
 
 ## User Stories
 
@@ -13,13 +13,13 @@ The following **required** functionality is completed:
 - [x] The current signed in user will be persisted across restarts.
 - [x] In the home timeline, user can view tweet with the user profile picture, username, tweet text, and timestamp.  In other words, design the custom cell with the proper Auto Layout settings.  You will also need to augment the model classes.
 - [x] User can pull to refresh.
-- [ ] User can compose a new tweet by tapping on a compose button.
+- [x] User can compose a new tweet by tapping on a compose button.
 - [x] User can tap on a tweet to view it, with controls to retweet, favorite, and reply.
 
 The following **optional** features are implemented:
 
 - [ ] When composing, you should have a countdown in the upper right for the tweet limit.
-- [ ] After creating a new tweet, a user should be able to view it in the timeline immediately without refetching the timeline from the network.
+- [x] After creating a new tweet, a user should be able to view it in the timeline immediately without refetching the timeline from the network.
 - [x] Retweeting and favoriting should increment the retweet and favorite count.
 - [x] User should be able to unretweet and unfavorite and should decrement the retweet and favorite count.
 - [ ] Replies should be prefixed with the username and the reply_id should be set when posting the tweet,
@@ -38,7 +38,14 @@ Please list two areas of the assignment you'd like to **discuss further with you
 
 Here's a walkthrough of implemented user stories:
 
-<img src='https://github.com/khanhtrung/Week03_Twitter/blob/master/Walkthrough/Twitter_01_Main.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+Home Timeline:
+
+<img src='https://github.com/khanhtrung/Week03_Twitter/blob/master/Walkthrough/Twitter_01_Main.gif' title='Video Walkthrough - Home Timeline' width='' alt='Video Walkthrough - Home Timeline' />
+
+
+Composing new tweet:
+
+<img src='https://github.com/khanhtrung/Week03_Twitter/blob/master/Walkthrough/Twitter_02_Tweet.gif' title='Video Walkthrough - Composing New Tweet' width='' alt='Video Walkthrough - Composing New Tweet' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
