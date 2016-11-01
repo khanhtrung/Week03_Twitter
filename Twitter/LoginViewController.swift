@@ -66,10 +66,10 @@ class LoginViewController: UIViewController {
     
     func setErrorViewHidden(){
         if self.reachability!.isReachableViaWiFi() || self.reachability!.isReachableViaWWAN() {
-            print("Service avalaible!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("Service avalaible!")
             self.networkErrorView.isHidden = true
         } else {
-            print("No service avalaible!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print("No service avalaible!")
             self.networkErrorView.isHidden = false
         }
     }

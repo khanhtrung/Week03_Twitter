@@ -18,15 +18,17 @@ class NewTweetViewController: UIViewController {
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var screenNameLabel: UILabel!
     @IBOutlet weak var charsCountLabel: UILabel!
-    @IBOutlet weak var tweetTextField: UITextField!
+    @IBOutlet weak var tweetTextView: UITextView!
+    @IBOutlet weak var tweetButton: UIBarButtonItem!
     
     var tweetUser: User!
     weak var delegate: NewTweetViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tweetTextField.becomeFirstResponder()
-        tweetTextField.text = ""
+        tweetTextView.becomeFirstResponder()
+        tweetTextView.delegate = self
+        tweetTextView.text = ""
         
         if let imageURL = tweetUser.profile_imageUrl_https {
             let imageURLString = imageURL.description.replacingOccurrences(of: "normal.", with: "bigger.")
@@ -62,7 +64,7 @@ class NewTweetViewController: UIViewController {
     }
     
     @IBAction func onTweetButton(_ sender: UIBarButtonItem) {
-        TwitterClient.sharedInstance.updateStatuses(status: tweetTextField.text!) { (successTweet, error) in
+        TwitterClient.sharedInstance.updateStatuses(status: tweetTextView.text!) { (successTweet, error) in
             if error != nil {
                 print("====>> New Tweet post: Error: \(error?.localizedDescription)")
                 return
@@ -74,5 +76,28 @@ class NewTweetViewController: UIViewController {
             
             self.dismiss(animated: true, completion: nil)
         }
+    }
+}
+
+//MARK: - UITextView methods
+extension NewTweetViewController: UITextViewDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let newLength = (textView.text?.utf16.count)! + text.utf16.count - range.length
+        
+        //Update the value of the label
+        charsCountLabel.text =  String(140 - newLength)
+        
+        // Set text color for the label
+        if (newLength >= 0) && (newLength <= 120) {
+            charsCountLabel.textColor = UIColor(red:0.67, green:0.72, blue:0.76, alpha:1.0)
+        } else {
+            charsCountLabel.textColor = UIColor.red
+        }
+        
+        // Lock Tweet button if text length greater than 140
+        tweetButton.isEnabled = !(newLength > 140)
+        
+        // Not allow enter greater than 150 chars
+        return newLength < 160
     }
 }
