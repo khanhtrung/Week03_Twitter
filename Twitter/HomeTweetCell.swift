@@ -128,10 +128,8 @@ class HomeTweetCell: UITableViewCell {
     
     @IBAction func onRetweetButton(_ sender: UIButton) {
         if !isRetweeted {
-            let originalTweetID = self.tweet.id
             TwitterClient.sharedInstance.retweet(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
-                self.showStatusByID(id_Int: originalTweetID)
-                self.delegate?.retweet!(homeTweetCell: self, didChangeValue: self.isRetweeted)
+                self.showStatusByID(id_Int: self.tweet.id, isAfterRetweetBtn: true)
             }) { (error:Error) in
                 print("Retweet: Error: \(error.localizedDescription)")
             }
@@ -139,8 +137,7 @@ class HomeTweetCell: UITableViewCell {
         }
         
         TwitterClient.sharedInstance.unretweet(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
-            self.showStatusByID(id_Int: self.tweet.id)
-            self.delegate?.retweet!(homeTweetCell: self, didChangeValue: self.isRetweeted)
+            self.showStatusByID(id_Int: self.tweet.id, isAfterRetweetBtn: true)
         }) { (error:Error) in
             print("UnRetweeted: Error: \(error.localizedDescription)")
         }
@@ -148,10 +145,8 @@ class HomeTweetCell: UITableViewCell {
     
     @IBAction func onFavoriteButton(_ sender: UIButton) {
         if !isFavorited {
-            let originalTweetID = self.tweet.id
             TwitterClient.sharedInstance.createFavorite(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
-                self.showStatusByID(id_Int: originalTweetID)
-                self.delegate?.favorite!(homeTweetCell: self, didChangeValue: self.isFavorited)
+                self.showStatusByID(id_Int: self.tweet.id, isAfterRetweetBtn: false)
             }) { (error:Error) in
                 print("Create Favorite: Error: \(error.localizedDescription)")
             }
@@ -159,16 +154,15 @@ class HomeTweetCell: UITableViewCell {
         }
         
         TwitterClient.sharedInstance.destroyFavorite(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
-            self.showStatusByID(id_Int: self.tweet.id)
-            self.delegate?.favorite!(homeTweetCell: self, didChangeValue: self.isFavorited)
+            self.showStatusByID(id_Int: self.tweet.id, isAfterRetweetBtn: false)
         }) { (error:Error) in
             print("Destroy Favorite: Error: \(error.localizedDescription)")
         }
     }
-    
-    func showStatusByID(id_Int: Int64) {
+        
+    func showStatusByID(id_Int: Int64, isAfterRetweetBtn: Bool) {
         var params: NSDictionary = NSDictionary()
-        params = ["id": self.tweet.id]
+        params = ["id": id_Int]
         TwitterClient.sharedInstance.showStatusByID(params: params) { (successTweet, error) in
             if error != nil {
                 print("====>> getTweetBy: Error: \(error?.localizedDescription)")
@@ -176,6 +170,11 @@ class HomeTweetCell: UITableViewCell {
             }
             if let tweet = successTweet {
                 self.tweet = tweet
+                if isAfterRetweetBtn {
+                    self.delegate?.retweet!(homeTweetCell: self, didChangeValue: self.isRetweeted)
+                } else {
+                    self.delegate?.favorite!(homeTweetCell: self, didChangeValue: self.isFavorited)
+                }
             }
         }
     }

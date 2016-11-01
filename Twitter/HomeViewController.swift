@@ -130,6 +130,8 @@ class HomeViewController: UIViewController {
                 
                 let tweetViewController = segue.destination as! TweetViewController
                 tweetViewController.id = tweet.id
+                tweetViewController.delegate = self
+                tweetViewController.homeTweetCellIndexPath = indexpath
                 break
             default:
                 break
@@ -152,19 +154,19 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-//MARK: - Check Cell methods
+//MARK: - HomeTweetCell methods
 extension HomeViewController: HomeTweetCellDelegate {
     
     func retweet(homeTweetCell: HomeTweetCell, didChangeValue value: Bool) {
-        let indexPath = tableView.indexPath(for: homeTweetCell)!
-        retweetStates[indexPath.row] = value
-        tweets[indexPath.row] = homeTweetCell.tweet
+        let currentRow = tableView.indexPath(for: homeTweetCell)!.row
+        retweetStates[currentRow] = value
+        tweets[currentRow] = homeTweetCell.tweet
     }
     
     func favorite(homeTweetCell: HomeTweetCell, didChangeValue value: Bool) {
-        let indexPath = tableView.indexPath(for: homeTweetCell)!
-        favoriteStates[indexPath.row] = value
-        tweets[indexPath.row] = homeTweetCell.tweet
+        let currentRow = tableView.indexPath(for: homeTweetCell)!.row
+        favoriteStates[currentRow] = value
+        tweets[currentRow] = homeTweetCell.tweet
     }
     
     func reply(homeTweetCell: HomeTweetCell, sender: UIButton) {
@@ -176,6 +178,15 @@ extension HomeViewController: HomeTweetCellDelegate {
 extension HomeViewController: NewTweetViewControllerDelegate {
     func newTweetViewController(newTweetViewController: NewTweetViewController, didUpdateTweet tweet: Tweet?) {
         tweets.insert(tweet!, at: 0)
+        tableView.reloadData()
+    }
+}
+
+//MARK: - TweetViewController methods
+extension HomeViewController: TweetViewControllerDelegate {
+    func tweetViewController(tweetViewController: TweetViewController, didUpdateTweet tweet: Tweet?, homeTweetCellIndexPath: IndexPath) {
+        // Reload at current cell
+        tweets[homeTweetCellIndexPath.row] = tweet!
         tableView.reloadData()
     }
 }

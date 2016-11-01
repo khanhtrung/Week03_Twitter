@@ -8,6 +8,10 @@
 
 import UIKit
 
+@objc protocol TweetViewControllerDelegate {
+    @objc func tweetViewController(tweetViewController: TweetViewController, didUpdateTweet tweet: Tweet?, homeTweetCellIndexPath: IndexPath)
+}
+
 class TweetViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
@@ -15,6 +19,8 @@ class TweetViewController: UIViewController {
     var tweets = [Tweet]()
     var retweetStates = [Int:Bool]()
     var favoriteStates = [Int:Bool]()
+    weak var delegate: TweetViewControllerDelegate?
+    var homeTweetCellIndexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +39,6 @@ class TweetViewController: UIViewController {
             self.tweets.removeAll()
             self.tweets = tweets
             self.tableView.reloadData()
-            
         }) { (error: Error) in
             print("Tweet View did load: Error: \(error.localizedDescription)")
         }
@@ -43,6 +48,28 @@ class TweetViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func willMove(toParentViewController parent: UIViewController?) {
+        
+        // exit if just opened from home time line
+        if parent != nil {
+            return
+        }
+        
+        // Get newest content for current tweet, to update current cell in home timeline view
+        var params: NSDictionary = NSDictionary()
+        params = ["id": self.id]
+        TwitterClient.sharedInstance.showStatusByID(params: params) { (successTweet, error) in
+            if error != nil {
+                print("====>> getTweetBy: Error: \(error?.localizedDescription)")
+                return
+            }
+            if let tweet = successTweet {
+                self.delegate?.tweetViewController(tweetViewController: self, didUpdateTweet: tweet, homeTweetCellIndexPath: self.homeTweetCellIndexPath!)
+            }
+        }
+    }
+    
 }
 
 //MARK: - Table methods
