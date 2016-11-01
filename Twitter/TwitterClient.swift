@@ -10,11 +10,11 @@ import UIKit
 import BDBOAuth1Manager
 
 let BASE_URL = "https://api.twitter.com/"
-let CONSUMER_KEY = "NT6Ws92ktDmqyoQZyTvAHJ1Pb"
-let CONSUMER_SECRET = "8zfScWQC9ZCIl6ejDifVTKhoNxBeFx7BDyVG5bipfg8sf44iKE"
+//let CONSUMER_KEY = "NT6Ws92ktDmqyoQZyTvAHJ1Pb"
+//let CONSUMER_SECRET = "8zfScWQC9ZCIl6ejDifVTKhoNxBeFx7BDyVG5bipfg8sf44iKE"
 
-//let CONSUMER_KEY = "JxUiG0fZyXliskmGJZYLjZcc4"
-//let CONSUMER_SECRET = "2rW7IMZQ9Iz73JTwm800PGoaRHTPa3Vz59nDRXx2I1NIEaiipo"
+let CONSUMER_KEY = "JxUiG0fZyXliskmGJZYLjZcc4"
+let CONSUMER_SECRET = "2rW7IMZQ9Iz73JTwm800PGoaRHTPa3Vz59nDRXx2I1NIEaiipo"
 
 
 class TwitterClient: BDBOAuth1SessionManager {

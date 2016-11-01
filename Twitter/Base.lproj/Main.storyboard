@@ -18,9 +18,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JEt-xO-L3q">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JEt-xO-L3q">
                                 <color key="backgroundColor" red="0.11372549019607843" green="0.63137254901960782" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
-                                <state key="normal" title="Login with Twitter">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="esv-Aa-q3K"/>
+                                    <constraint firstAttribute="height" constant="30" id="nwW-qH-ILr"/>
+                                </constraints>
+                                <state key="normal" title="Login with Twitter" image="Twitter_logo_white_48">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
@@ -53,12 +57,14 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="loginButton" destination="JEt-xO-L3q" id="6Vo-w4-fUu"/>
                         <outlet property="networkErrorView" destination="v26-1Y-WVW" id="HgX-XC-N4T"/>
                         <segue destination="bLO-p6-cyn" kind="presentation" identifier="LoginSegue" id="6yw-xv-ynn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="116.25" y="123.59154929577466"/>
         </scene>
         <!--Home-->
         <scene sceneID="Zdb-5j-YoW">
@@ -492,6 +498,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Twitter_logo_white_48" width="24" height="24"/>
         <image name="like-action" width="54" height="72"/>
         <image name="reply-action_0" width="32" height="36"/>
         <image name="retweet-action" width="75" height="72"/>

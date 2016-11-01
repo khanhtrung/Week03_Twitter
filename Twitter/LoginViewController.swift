@@ -14,11 +14,20 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var networkErrorView: UIView!
     var reachability: Reachability?
+    @IBOutlet weak var loginButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        // Button corner
+        loginButton.layer.cornerRadius = 5
+        
+        // Shadow
+        loginButton.layer.shadowColor = UIColor(white: 0x000000, alpha: 0.2).cgColor
+        loginButton.layer.shadowOpacity = 1.0
+        loginButton.layer.shadowRadius = 0
+        loginButton.layer.masksToBounds = false
+        loginButton.layer.shadowOffset = CGSize(width: 0,height: 0.75)
     }
     
     override func viewWillAppear(_ animated: Bool) {
