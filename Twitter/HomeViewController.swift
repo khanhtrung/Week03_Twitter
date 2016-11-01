@@ -157,13 +157,13 @@ extension HomeViewController: HomeTweetCellDelegate {
     
     func retweet(homeTweetCell: HomeTweetCell, didChangeValue value: Bool) {
         let indexPath = tableView.indexPath(for: homeTweetCell)!
-        retweetStates[indexPath.row] = homeTweetCell.isRetweeted
+        retweetStates[indexPath.row] = value
         tweets[indexPath.row] = homeTweetCell.tweet
     }
     
     func favorite(homeTweetCell: HomeTweetCell, didChangeValue value: Bool) {
         let indexPath = tableView.indexPath(for: homeTweetCell)!
-        favoriteStates[indexPath.row] = homeTweetCell.isFavorited
+        favoriteStates[indexPath.row] = value
         tweets[indexPath.row] = homeTweetCell.tweet
     }
     

@@ -130,7 +130,6 @@ class HomeTweetCell: UITableViewCell {
         if !isRetweeted {
             let originalTweetID = self.tweet.id
             TwitterClient.sharedInstance.retweet(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
-                //self.tweet = responseTweet
                 self.showStatusByID(id_Int: originalTweetID)
                 self.delegate?.retweet!(homeTweetCell: self, didChangeValue: self.isRetweeted)
             }) { (error:Error) in
@@ -140,7 +139,6 @@ class HomeTweetCell: UITableViewCell {
         }
         
         TwitterClient.sharedInstance.unretweet(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
-            self.tweet = responseTweet
             self.showStatusByID(id_Int: self.tweet.id)
             self.delegate?.retweet!(homeTweetCell: self, didChangeValue: self.isRetweeted)
         }) { (error:Error) in
@@ -152,7 +150,6 @@ class HomeTweetCell: UITableViewCell {
         if !isFavorited {
             let originalTweetID = self.tweet.id
             TwitterClient.sharedInstance.createFavorite(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
-                //self.tweet = responseTweet
                 self.showStatusByID(id_Int: originalTweetID)
                 self.delegate?.favorite!(homeTweetCell: self, didChangeValue: self.isFavorited)
             }) { (error:Error) in
@@ -162,7 +159,6 @@ class HomeTweetCell: UITableViewCell {
         }
         
         TwitterClient.sharedInstance.destroyFavorite(id_Int: self.tweet.id, success: { (responseTweet:Tweet) in
-            //self.tweet = responseTweet
             self.showStatusByID(id_Int: self.tweet.id)
             self.delegate?.favorite!(homeTweetCell: self, didChangeValue: self.isFavorited)
         }) { (error:Error) in
